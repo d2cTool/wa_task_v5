@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using WA_Test_V5.GetData.Excel;
+using WA_Test_V5.Helper;
 using WA_Test_V5.Interface.JsTreeNodes;
 
 namespace WA_Test_V5.Controllers
@@ -15,8 +16,12 @@ namespace WA_Test_V5.Controllers
         }
         public JsonResult GetTreeViewSample()
         {
+            var parser2 = new GetExcelData(Server.MapPath("~/Content/Task.xlsx"));
             var parser = new GetExcelData(Server.MapPath("~/Content/SampleData.xlsx"));
+            
             var _SampleTreeView = parser.GetSample();
+            var inData = parser2.GetData().Convert();
+
             int nodeUnicID = 0;
             var ParentsDic = new Dictionary<int, string>();//no
             var ReadyList = new List<JsTree3Node>();
@@ -31,7 +36,7 @@ namespace WA_Test_V5.Controllers
             ReadyList.Add(mainNode);
             ParentsDic.Add(nodeUnicID, "0");
             nodeUnicID++;
-            foreach (var elem in _SampleTreeView)
+            foreach (var elem in inData)//_SampleTreeView)
             {
                 var newNode = new JsTree3Node()
                 {
